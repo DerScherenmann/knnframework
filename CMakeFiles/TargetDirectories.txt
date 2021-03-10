@@ -1,0 +1,5 @@
+/media/data2/programming/cpp_projects/knnframework/CMakeFiles/edit_cache.dir
+/media/data2/programming/cpp_projects/knnframework/CMakeFiles/package_source.dir
+/media/data2/programming/cpp_projects/knnframework/CMakeFiles/rebuild_cache.dir
+/media/data2/programming/cpp_projects/knnframework/CMakeFiles/package.dir
+/media/data2/programming/cpp_projects/knnframework/CMakeFiles/knnframework.dir
