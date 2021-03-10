@@ -1,4 +1,3 @@
-#include "main.h"
 #include <iostream>
 #include "network.h"
 #include "neuron.h"
@@ -10,8 +9,6 @@
 #include <sstream>
 
 #include <thread>
-
-#define __GPU
 
 typedef unsigned char uchar;
 

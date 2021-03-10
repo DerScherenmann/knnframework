@@ -43,8 +43,6 @@ private:
     
     float backProp(float &deltaCurrent,float &activationBefore);
     float backPropMomentum(float &deltaCurrent, float &activationBefore, float &oldChange);
-    void backPropGPU(float &deltaCurrent,float &activationBefore,float* weightChange);
-    void backPropMomentumGPU(float &deltaCurrent, float &activationBefore, float &oldChange,float* weightChange);
 
     float calcMSE(std::vector<std::pair<std::vector<float>, std::vector<float>>> &trainingData, std::vector<std::vector<Neuron>> &outputNeurons);
     float calcRMSE(std::vector<std::pair<std::vector<float>, std::vector<float>>> &trainingData, std::vector<std::vector<Neuron>> &outputNeurons);
