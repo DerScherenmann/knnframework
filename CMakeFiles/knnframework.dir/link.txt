@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/knnframework.dir/src/main.cpp.o CMakeFiles/knnframework.dir/src/network.cpp.o CMakeFiles/knnframework.dir/src/mathhelper.cpp.o CMakeFiles/knnframework.dir/src/neuron.cpp.o -o knnframework 
