@@ -48,8 +48,15 @@ include/divisible/*
 .idea/*.xml
 
 build/**/*
+build/*
 
 include/*
 lib/*
 bin/*
 test/test_runner
+
+.vscode/*
+.kdev4/*
+*.cmake
+*.kdev4
+
