@@ -23,3 +23,8 @@ For example: 784 input neurons, 30 hidden neurons and 10 output neurons, all usi
 Get the highest prediction, with wich you can read from `predictions`:
 
 `int index = network.highestPred(predictions);`
+
+
+## Tips and Tricks:
+
+You may experience some bugs or other weird stuff. Please open an issue or open a pull request if needed.
