@@ -25,7 +25,6 @@ unsigned char* readBMP(std::string filename);
 int main(int argc, char* argv[]) {
     
     printf("Neural Networks HomeOffice created on 20.05.2020 22:56 GMT+1\n\n\nStarting...\n");
-    reinitNetwork:
     //our network
     //image recognition
     std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SWISH},{30,Neuron::modes::SWISH}, {10,Neuron::modes::SWISH},{10,Neuron::modes::SIGMOID}};

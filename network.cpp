@@ -225,21 +225,19 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 
 		averageTimeEpoch += microsecondsEpoch.count();
 
-		//break if error is small
-		if (error < 0.09) break;
 	}
 
 	std::cout << "Average time for one epoch: " << averageTimeEpoch / 100 << std::endl;
 	std::cout << "One training data step: " << averageTimeEpoch / 100 / 10000 << std::endl;
 
-        //zero old changes
-	for (int i = 0; i < oldchange.size(); i++) {
-		for (int j = 0; j < oldchange[i].size(); j++) {
-			for (int k = 0; k < oldchange[i][j].size(); k++) {
-				oldchange[i][j][k] = 0;
-			}
-		}
-	}
+//         zero old changes
+// 	for (int i = 0; i < oldchange.size(); i++) {
+// 		for (int j = 0; j < oldchange[i].size(); j++) {
+// 			for (int k = 0; k < oldchange[i][j].size(); k++) {
+// 				oldchange[i][j][k] = 0;
+// 			}
+// 		}
+// 	}
 	allOutputs.clear();
 
 	return 0;
