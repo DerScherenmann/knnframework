@@ -1,7 +1,13 @@
-# Neural Network library written in c++
+# Neural Network library written in cpp
 
-This is/was a school project, there may be some bugs or bad code/quality of life
+## Usage:
 
-## Examples
+### First off design your network structure:
 
-main.h and main.cpp are examples of usage
+For example: 784 input neurons, 30 hidden neurons and 10 output neurons, all using the sigmoid function
+
+`std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SIGMOID},{30,Neuron::modes::SIGMOID}, {10,Neuron::modes::SIGMOID}};
+
+### Then create a network:
+
+`Network net = Network(layers);`
