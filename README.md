@@ -10,4 +10,16 @@ For example: 784 input neurons, 30 hidden neurons and 10 output neurons, all usi
 
 ### Then create a network:
 
-`Network net = Network(layers);`
+`Network network = Network(layers);`
+
+### Provide the network with adequate training data and parameters and start training:
+
+`network.train(trainingData,0.05,0.4,100);`
+
+### If training has successfully completed, read the output values, after inputting some data:
+
+`std::vector<float> predictions = network.predict(testData);`
+
+Get the highest prediction, with wich you can read from `predictions`:
+
+`int index = network.highestPred(predictions);`
