@@ -28,3 +28,7 @@ Get the highest prediction, with wich you can read from `predictions`:
 ## Tips and Tricks:
 
 You may experience some bugs or other weird stuff. Please open an issue or open a pull request if needed.
+
+## Known bugs:
+
+- Retraining the network after training finishes doesn't work
