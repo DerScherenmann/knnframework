@@ -24,32 +24,29 @@ unsigned char* readBMP(std::string filename);
 
 int main(int argc, char* argv[]) {
     
-    printf("Neural Networks HomeOffice created on 20.05.2020 22:56 GMT+1\n\n\nStarting...\n");
+//     printf("Neural Networks HomeOffice created on 20.05.2020 22:56 GMT+1\n\n\nStarting...\n");
     //our network
     //image recognition
-    std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SWISH},{30,Neuron::modes::SWISH}, {10,Neuron::modes::SWISH},{10,Neuron::modes::SIGMOID}};
+    std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SWISH},{30,Neuron::modes::SWISH}, {30,Neuron::modes::SWISH},{10,Neuron::modes::SIGMOID}};
     Network net = Network(layers);
     
     while (1) {
 
-	printf("Operating Modes are:\n[0] Load database into memory\n[1] Train network with MNIST databse\n[2] Test Network with MNIST images\n[3] Use your own hand drawn image\n");
+	printf("Operating Modes are:\n[1] Train network with MNIST databse\n[2] Test Network with MNIST images\n[3] Use your own hand drawn image\n");
 	printf("[4] Save network to file\n[5] Load network from file\n[6] Reinitialize neural network\n");
 
 	char readChar = getchar();
 		
-	if (readChar == '0') {
-            
-            if (readStuff(60000,60000)) {
-                std::cout << "Success!" << std::endl;
-            }
+    if (readStuff(60000,60000)) {
+        std::cout << "Success!" << std::endl;
+    }
 
-		}
         if (readChar == '1') {
 
             /*
             *   Start training
             */
-            int numImages = 100;
+            int numImages = 60000;
             
             std::vector<std::pair<std::vector<float>, std::vector<float>>> trainingData;
             //lets use 100 images   
@@ -80,19 +77,33 @@ int main(int argc, char* argv[]) {
         }
         if (readChar == '2') {
             
-            Math math;
-            int testindex = math.rand_in_range(0, 10000);
-            std::cout << testindex << " in " << testimages.size() << std::endl;
-            std::vector<float> testData = testimages[testindex];
-            std::cout << "Data: " << (int) (testlabels[testindex]) << std::endl;
+//             Math math;
+//             int testindex = math.rand_in_range(0, 10000);
+//             std::cout << testindex << " in " << testimages.size() << std::endl;
+//             std::vector<float> testData = testimages[testindex];
+//             std::cout << "Data: " << (int) (testlabels[testindex]) << std::endl;
+//
+//             predict
+//             std::vector<float> outputValues = net.predict(testData);
+//             get highest value
+//             int index = net.highestPred(outputValues);
+//             std::cout << "Prediction: " << index << " confidence: " << outputValues[index] << std::endl;
+//
+//             outputValues.clear();
 
-            //predict
-            std::vector<float> outputValues = net.predict(testData);
-            //get highest value
-            int index = net.highestPred(outputValues);
-            std::cout << "Prediction: " << index << " confidence: " << outputValues[index] << std::endl;
-            
-            outputValues.clear();
+            int wrongAnswers = 0;
+            for(int i = 0;i < testimages.size();i++){
+                std::vector<float> predOutputValues = net.predict(testimages[i]);
+                int predIndex = net.highestPred(predOutputValues);
+                if(predIndex != (int) testlabels[i]){
+                    wrongAnswers++;
+                    for(float f:predOutputValues){
+                        std::cout << f << ",";
+                    }
+                    std::cout << std::endl;
+                }
+            }
+            std::cout << "Error: " << (float) wrongAnswers/10000 << std::endl;
 
         }
         if (readChar == '3') {
