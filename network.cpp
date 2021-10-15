@@ -42,7 +42,7 @@ Network::Network(std::vector<std::pair<int,int>> sizes)
 		oldchange.push_back(math.defmatrix(sizes[x].first+1, sizes[y].first));
 		y++;
 	}
-
+    
 	//zero old changes
 	for (int i = 0; i < oldchange.size(); i++) {
 		for (int j = 0; j < oldchange[i].size(); j++) {
@@ -117,7 +117,7 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 		auto startEpoch = std::chrono::high_resolution_clock::now();
 
 		std::cout << "Epoch: " << epoch << std::endl;
-
+        
 		for (std::pair<std::vector<float>, std::vector<float>> &pair : trainingData) {
 
 			//benchmarking
@@ -127,7 +127,7 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 			//also set activations
 			//add all highest outputs from training data together
 			std::vector<Neuron> output = feedForward(pair.first);
-
+            
 			//benchmarking
 			auto finishForward = std::chrono::high_resolution_clock::now();
 			auto microsecondsForward = std::chrono::duration_cast<std::chrono::microseconds>(finishForward - startForward);

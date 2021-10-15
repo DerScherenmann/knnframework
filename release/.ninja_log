@@ -1,0 +1,9 @@
+# ninja log v5
+0	812	1633863924326324187	CMakeFiles/network.dir/neuron.cpp.o	3f4c8946d133c684
+0	883	1633863924399657330	CMakeFiles/network.dir/mathhelper.cpp.o	433de6ed1956c4aa
+0	1153	1633863924669656631	CMakeFiles/knnframework.dir/main.cpp.o	dd8e8b41ad12db53
+0	1568	1633863925082988893	CMakeFiles/network.dir/network.cpp.o	e5ab5b2c181b6534
+1568	1590	1633863925106322166	libnetwork.a	65967ccc90c4f427
+1590	1622	1633863925136322089	knnframework	db87aac165f667ac
+0	889	1633863965419550987	CMakeFiles/knnframework.dir/main.cpp.o	dd8e8b41ad12db53
+889	919	1633863965449550910	knnframework	db87aac165f667ac

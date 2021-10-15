@@ -29,6 +29,12 @@ int main(int argc, char* argv[]) {
     //image recognition
     std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SWISH},{30,Neuron::modes::SWISH}, {30,Neuron::modes::SWISH},{10,Neuron::modes::SIGMOID}};
     Network net = Network(layers);
+
+    std::cout << (size_t) true << std::endl;
+    
+    if (!readStuff(60000,60000)) {
+        std::cout << "Success!" << std::endl;
+    }
     
     while (1) {
 
@@ -36,17 +42,13 @@ int main(int argc, char* argv[]) {
 	printf("[4] Save network to file\n[5] Load network from file\n[6] Reinitialize neural network\n");
 
 	char readChar = getchar();
-		
-    if (readStuff(60000,60000)) {
-        std::cout << "Success!" << std::endl;
-    }
 
         if (readChar == '1') {
-
+            std::cout << "Starting training..." << std::endl;
             /*
             *   Start training
             */
-            int numImages = 60000;
+            int numImages = 1000;
             
             std::vector<std::pair<std::vector<float>, std::vector<float>>> trainingData;
             //lets use 100 images   
@@ -71,7 +73,7 @@ int main(int argc, char* argv[]) {
                 trainingData[i].second = temp;
             }
                 
-            net.train(trainingData,0.05,0.4,100);
+            net.train(trainingData,0.05,0.4,1);
             //start training with images
             trainingData.clear();      
         }
@@ -233,7 +235,8 @@ int readStuff(int number_of_images,int number_of_labels) {
         //});
         file.close();
     }else{
-        std::cout << "File not found!" << std::endl;
+        std::cout << "File not found! train-images.idx3-ubyte" << std::endl;
+        return 1;
     }
     /*
     * Open training labels
@@ -256,6 +259,9 @@ int readStuff(int number_of_images,int number_of_labels) {
         }
         labels = _dataset;
         file.close();
+    }else{
+        std::cout << "File not found! train-labels.idx1-ubyte" << std::endl;
+        return 1;
     }
     /*
     * Open Test Images
@@ -295,6 +301,9 @@ int readStuff(int number_of_images,int number_of_labels) {
         }
         //});
         file.close();
+    }else{
+        std::cout << "File not found! t10k-images.idx3-ubyte" << std::endl;
+        return 1;
     }
     /*
     * Open Test Labels
@@ -316,6 +325,9 @@ int readStuff(int number_of_images,int number_of_labels) {
             file.read((char*)&_dataset[i], 1);
         }
         testlabels = _dataset;
+    }else{
+        std::cout << "File not found! t10k-labels.idx1-ubyte" << std::endl;
+        return 1;
     }
 
     return 0;
