@@ -74,6 +74,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# Clion .idea folder
+.idea/*
 
 # CLion build directories
 cmake-build-*/
@@ -93,3 +95,5 @@ _deps
 
 # Project specific
 *.knn
+
+googletest
