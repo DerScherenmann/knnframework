@@ -56,7 +56,7 @@ private:
      */
     std::vector<Neuron*> feedForward(std::vector<float>& testData);
     
-    float backProp(float &deltaCurrent,float &activationBefore);
+    float backProp(float deltaCurrent,float activationBefore);
     float backPropMomentum(float deltaCurrent, float activationBefore, float &oldChange);
 
     /*

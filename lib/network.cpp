@@ -36,16 +36,13 @@ void static_handleSignalInterrupt(int s){
  * Constructs a neural network
  * @param sizes pair which holds layer size and m_activationFunction
  */
-Network::Network(std::vector<std::pair<int,int>> &sizes) {
+Network::Network(std::vector<std::pair<int,int>> &sizes) : numLayers(sizes.size()),sizes(sizes),m_error(1.0) {
     // Initialize signal catcher
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = static_handleSignalInterrupt;
     sigemptyset(&sigIntHandler.sa_mask);
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, NULL);
-
-	this->numLayers = sizes.size();
-	this->sizes = sizes;
 
 	int y = 1;
 	for (int x = 0; x < numLayers;x++) {
@@ -140,7 +137,7 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 		//benchmarking
 		auto startEpoch = std::chrono::high_resolution_clock::now();
 
-		std::cout << "Epoch: " << currentEpoch << std::endl;
+		//std::cout << "Epoch: " << currentEpoch << std::endl;
         
 		for (std::pair<std::vector<float>, std::vector<float>> &pair : trainingData) {
 
@@ -206,12 +203,11 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 				for (int j = 0; j < neuronLayers[i].size() - 1; j++) {
 					for (int k = 0; k < neuronLayers[i - 1].size(); k++) {
 						//without momentum
-						//float change = backProp(neuronLayers[i][j].m_delta, neuronLayers[i - 1][k].m_activation);
+						//float change = backProp(neuronLayers[i][j]->getDelta(), neuronLayers[i - 1][k]->getActivation());
 
 						//with momentum
 						float change = -1 * backPropMomentum(neuronLayers[i][j]->getDelta(), neuronLayers[i - 1][k]->getActivation(), oldchange[i - 1][j][k]);
 						oldchange[i - 1][j][k] = change;
-
 						weights[i - 1][j][k] += change;
 					}
 				}
@@ -236,11 +232,11 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 		auto finishEpoch = std::chrono::high_resolution_clock::now();
 		auto microsecondsEpoch = std::chrono::duration_cast<std::chrono::microseconds>(finishEpoch - startEpoch);
 
-        std::cout << "Error: " << m_error << std::endl;
-		std::cout << averageTimeForward / timesForward << " microseconds forward calculation\n";
+        //std::cout << "Error: " << m_error << std::endl;
+		/*std::cout << averageTimeForward / timesForward << " microseconds forward calculation\n";
 		std::cout << averageTimeBackprop/timesBackprop << " microseconds backprop calculation\n";
 		std::cout << averageTimeChange/timesChange << " microseconds change calculation\n";
-		std::cout << microsecondsEpoch.count() << " microseconds currentEpoch calculation\n";
+		std::cout << microsecondsEpoch.count() << " microseconds currentEpoch calculation\n";*/
 		averageTimeForward = 0;
 		timesForward = 0;
 		averageTimeBackprop = 0;
@@ -250,10 +246,14 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 
 		averageTimeEpoch += microsecondsEpoch.count();
 
+        if(currentEpoch == 0){
+            std::cout << "First error: " << m_error << std::endl;
+        }
 	}
 
-	std::cout << "Average time for one epoch: " << averageTimeEpoch / 100 << std::endl;
-	std::cout << "One training data step: " << averageTimeEpoch / 100 / 10000 << std::endl;
+	std::cout << "Average microseconds for one epoch: " << (float) averageTimeEpoch / (float) getEpochsToTrain() << std::endl;
+	std::cout << "Average microseconds for one training data step: " << (float) averageTimeEpoch / (float) getEpochsToTrain() / (float) trainingData.size() << std::endl;
+    std::cout << "Last error: " << m_error << std::endl;
 
 //         zero old changes
 // 	for (int i = 0; i < oldchange.size(); i++) {
@@ -305,7 +305,7 @@ std::vector<float> Network::predict(std::vector<float> &testData) {
 /*
 *	Training algorithms
 */
-float Network::backProp(float &deltaCurrent,float &activationBefore) {  
+float Network::backProp(float deltaCurrent,float activationBefore) {
 	//j -> i
 	//learningrate * deltai * activationj
 	float weightChange =  -1* learningRate * deltaCurrent * activationBefore;
@@ -374,7 +374,6 @@ void Network::calcRMSE(std::pair<std::vector<float>, std::vector<float>> &traini
  * @return index of highest value
  */
 int Network::highestPred(std::vector<float> &outputValues) {
-
 	//get highest value
 	std::vector<float>::iterator it = std::max_element(outputValues.begin(), outputValues.end());
 	int index = std::distance(outputValues.begin(), it);
