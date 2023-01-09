@@ -3,12 +3,12 @@
 #include "../include/neuron.h"
 
 //neurons holds neurons of the layer before and therefore their m_activation, weights are the weights to this neuron
-void Neuron::calculateActivation(std::vector<Neuron*> &neurons, std::vector<float> &weights) {
+void Neuron::calculateActivation(std::vector<Neuron*> &neurons) {
     //skip this if neuron is bias
     if (m_neuronType == NEURON) {
         m_activation = 0;
         for (int i = 0; i < neurons.size(); i++) {
-            m_activation += neurons[i]->getActivation() * weights[i];
+            m_activation += neurons[i]->getActivation() * m_weights[i];
         }
         setSum(m_activation);
         setActivation(act(m_activation));

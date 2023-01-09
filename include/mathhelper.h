@@ -74,15 +74,28 @@ class Math {
             return output;
         }
 
+        /**
+         * Creates a vector filled with random distribution values
+         * @param length final length of the vector
+         * @return vector with random distribution
+         */
+        std::vector<float> defVector(int length){
+            std::vector<float> rngVector;
+            for(int i = 0;i < length;i++){
+                rngVector.emplace_back(rng() / sqrt(length));
+            }
+            return rngVector;
+        }
+
         std::vector<std::vector<float>> defmatrix(int y, int x) {
             std::vector<std::vector<float>> output;
             std::vector<float> data;
             for (int k = 0; k < x; k++) {
                 for (int i = 0; i < y; i++) {
                     data.push_back(rng() / sqrt(x));
-            }
-            output.push_back(data);
-            data.clear();
+                }
+                output.push_back(data);
+                data.clear();
             }
             return output;
         }

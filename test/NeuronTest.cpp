@@ -10,22 +10,16 @@ class NeuronTestSuite : public ::testing::Test {
 protected:
     virtual void SetUp() {
         testNeuron = new Neuron(1,Neuron::NEURON,Neuron::SIGMOID);
-        // Populate dummy weights
-        for(int i = 0;i < 10;i++){
-            previousWeights.push_back(i % 2);
-        }
         for(int i = 0;i < 10;i++){
             previousNeurons.push_back(new Neuron(i % 2,Neuron::NEURON,Neuron::SIGMOID));
+            testNeuron->getWeights().emplace_back(i % 2);
         }
     }
     virtual void TearDown() {
         delete testNeuron;
     }
     std::vector<Neuron*> previousNeurons;
-    std::vector<float> previousWeights;
-
     Math math;
-
     Neuron* testNeuron;
 };
 
@@ -34,15 +28,15 @@ protected:
  */
 TEST_F(NeuronTestSuite,TestCalculateActivation) {
     std::vector<Neuron*> oneNeuron(previousNeurons.begin(),previousNeurons.begin());
-    testNeuron->calculateActivation(oneNeuron, previousWeights);
+    testNeuron->calculateActivation(oneNeuron);
 
     // Activation should be sigmoid(0*1)
     ASSERT_FLOAT_EQ(math.sigmoid(0),testNeuron->getActivation());
 
-    testNeuron->calculateActivation(previousNeurons,previousWeights);
+    testNeuron->calculateActivation(previousNeurons);
     int testActivation = 0;
     for(int i = 0;i < previousNeurons.size();i++){
-        testActivation += previousNeurons[i]->getActivation() * previousWeights[i];
+        testActivation += previousNeurons[i]->getActivation() * testNeuron->getWeights()[i];
     }
     ASSERT_FLOAT_EQ(math.sigmoid(testActivation),testNeuron->getActivation());
 }
@@ -53,6 +47,6 @@ TEST_F(NeuronTestSuite,TestCalculateActivation) {
 TEST_F(NeuronTestSuite,TestSkipIfBias) {
     testNeuron->setType(Neuron::BIAS);
     testNeuron->setActivation(0.14151);
-    testNeuron->calculateActivation(previousNeurons,previousWeights);
+    testNeuron->calculateActivation(previousNeurons);
     ASSERT_FLOAT_EQ(0.14151,testNeuron->getActivation());
 }

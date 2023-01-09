@@ -47,6 +47,10 @@ public:
     float getError() const {
         return m_error;
     }
+
+    enum errorFunctions {
+        SQUARED = 0,
+    };
 protected:
     void calcMSE(std::vector<std::pair<std::vector<float>, std::vector<float>>> &trainingData, std::vector<std::vector<Neuron*>> &outputNeurons);
     void calcRMSE(std::pair<std::vector<float>, std::vector<float>> &trainingData, std::vector<Neuron*> &outputNeurons);
@@ -63,10 +67,10 @@ private:
      *  Class Variables
      */
     //Layer -> Neuron -> Weights (holds weights pointing into neuron)
-    std::vector<std::vector<std::vector<float>>> weights;
+/*    std::vector<std::vector<std::vector<float>>> weights;*/
     //Layer -> Neuron -> change
-    std::vector<std::vector<std::vector<float>>> oldchange;
-    //Layer -> Neuron -> class values
+
+    //Layer -> Neuron, class values
     std::vector<std::vector<Neuron*>> neuronLayers;
 
     int epochsToTrain;
@@ -75,6 +79,9 @@ private:
     float learningRate;
     float momentum;
     float m_error;
+    unsigned int m_errorFunction;
     //Network sizes
     std::vector<std::pair<int,int>> sizes;
+
+    void calculateError(Neuron *neuronToChange, float correctOuput);
 };

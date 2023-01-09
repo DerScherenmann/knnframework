@@ -26,7 +26,7 @@ class Neuron {
 		enum NeuronMode {
 			SWISH = 0,SIGMOID,RELU
 		};
-		void calculateActivation(std::vector<Neuron*> &neurons, std::vector<float> &weights);
+		void calculateActivation(std::vector<Neuron*> &neurons);
 		float act(float x);
 		float actPrime(float x);
 
@@ -70,6 +70,22 @@ class Neuron {
         Neuron::m_activationFunction = mode;
     }
 
+    std::vector<float> &getWeights() {
+        return m_weights;
+    }
+
+    void setWeights(std::vector<float> &weights) {
+        m_weights = weights;
+    }
+
+    std::vector<float> &getPreviousChangesToWeights() {
+        return m_previousChangesToWeights;
+    }
+
+    void setMPreviousChangesToWeights(std::vector<float> &PreviousChangesToWeights) {
+        m_previousChangesToWeights = PreviousChangesToWeights;
+    }
+
 private:
         Math math;
         float m_activation = 0;
@@ -80,5 +96,7 @@ private:
         float m_delta = 0;
         int m_neuronType = 1;
         int m_activationFunction = 0;
+        std::vector<float> m_weights;
+        std::vector<float> m_previousChangesToWeights;
 };
 #endif
