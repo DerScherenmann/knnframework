@@ -96,4 +96,4 @@ _deps
 # Project specific
 *.knn
 
-googletest
+googletest/*

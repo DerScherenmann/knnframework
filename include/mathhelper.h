@@ -26,8 +26,7 @@ class Math {
         /***  Last update:  09/28/99  for version 2.0 of BP-XOR program     ***/
         /**********************************************************************/
 
-        float sigmoid(float x)
-        {
+        float sigmoid(float x) {
                 float exp_value;
                 float return_value;
 
@@ -88,34 +87,12 @@ class Math {
             return output;
         }
 
-
-        int reverseInt(int i)
-        {
+        int reverseInt(int i) {
                 unsigned char c1, c2, c3, c4;
                 c1 = i & 255;
                 c2 = (i >> 8) & 255;
                 c3 = (i >> 16) & 255;
                 c4 = (i >> 24) & 255;
                 return ((int)c1 << 24) + ((int)c2 << 16) + ((int)c3 << 8) + c4;
-        }
-
-        float delta(float sum,std::vector<float> weights, float deltaPrev) {
-
-                float output = 0;
-                float sumWeights = 0;
-                for (float weight : weights) sumWeights += weight;
-                output = sigmoidPrime(sum) * sumWeights * deltaPrev;
-
-                return output;
-        }
-
-        //deltak * activationi (k is the following layer)
-        float gradient(float delta,float activation) {
-
-                float output = 0;
-
-                output = delta * activation;
-
-                return output;
         }
 };

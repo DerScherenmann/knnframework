@@ -6,7 +6,7 @@
 
 For example: 784 input neurons, 30 hidden neurons and 10 output neurons, all using the sigmoid function
 
-`std::vector<std::pair<int,int>> layers = {{784,Neuron::modes::SIGMOID},{30,Neuron::modes::SIGMOID}, {10,Neuron::modes::SIGMOID}};`
+`std::vector<std::pair<int,int>> layers = {{784,Neuron::NeuronMode::SIGMOID},{30,Neuron::NeuronMode::SIGMOID}, {10,Neuron::NeuronMode::SIGMOID}};`
 
 ### Then create a network:
 
@@ -28,6 +28,10 @@ Get the highest prediction, with wich you can read from `predictions`:
 ## Tips and Tricks:
 
 You may experience some bugs or other weird stuff. Please open an issue or open a pull request if needed.
+
+## Training Data:
+
+Training data in the MNIST database from http://yann.lecun.com/exdb/mnist/
 
 ## Known bugs:
 

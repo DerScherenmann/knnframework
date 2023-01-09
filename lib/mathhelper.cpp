@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-#include "mathhelper.h"
+#include "../include/mathhelper.h"
 #include <random>
 #include <vector>
 //Gaussian distribution
