@@ -8,13 +8,12 @@ add_library(knnlibrary STATIC
         include/neuron.h
         lib/mathhelper.cpp
         include/mathhelper.h
-)
+        lib/network.cpp lib/network.cpp)
+
+SET(CMAKE_C_FLAGS_DEBUG "-D_DEBUG")
 
 # comment this to disable example
 #add_library(knnframework test/ProjectTest.cpp test/ProjectTest.h test/NeuronTest.cpp test/NetworkTest.cpp)
-
-#target_link_libraries(knnframework PRIVATE network)
-#target_link_libraries(network)
 
 configure_file(t10k-images.idx3-ubyte t10k-images.idx3-ubyte COPYONLY)
 configure_file(t10k-labels.idx1-ubyte t10k-labels.idx1-ubyte COPYONLY)

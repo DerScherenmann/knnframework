@@ -126,52 +126,37 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
         if(signalFlag == 2){
             std::cout << "Interrupted trainging in Epoch: " << currentEpoch << std::endl;
             signalFlag = 0;
+	        allOutputs.clear();
+	        std::cout << "Last error: " << m_error << std::endl;
             return 0;
         }
-
-		//benchmarking
-		auto startEpoch = std::chrono::high_resolution_clock::now();
-
-		//std::cout << "Epoch: " << currentEpoch << std::endl;
         
 		for (std::pair<std::vector<float>, std::vector<float>> &pair : trainingData) {
-
-			//benchmarking
-			auto startForward = std::chrono::high_resolution_clock::now();
 
 			//TODO improve performance of forward propagation
 			//also set activations
 			//add all highest outputs from training data together
 			std::vector<Neuron*> networkOuput = feedForward(pair.first);
-            
-			//benchmarking
-			auto finishForward = std::chrono::high_resolution_clock::now();
-			auto microsecondsForward = std::chrono::duration_cast<std::chrono::microseconds>(finishForward - startForward);
-			averageTimeForward += microsecondsForward.count();
-			timesForward++;
 
 			//push back to later compare
-			allOutputs.emplace_back(networkOuput);
-
-			//benchmarking
-			auto startBackprop = std::chrono::high_resolution_clock::now();
+			//allOutputs.emplace_back(networkOuput);
 
 			//secondly we need to calculate m_delta for each neuron in the network (except input neurons), we are starting from behind
             //WARNING: changed to calculate input neurons as well as of implementation into CNN
-			for (int i = neuronLayers.size() - 1; i > 0; i--) {
-				//-1 bc we dont want to calculate for the bias
+			for (int i = neuronLayers.size()-1; i > 0; i--) {
+				//-1 bc we don't want to calculate for the bias
 				for (int j = 0; j <= neuronLayers[i].size() - 1; j++) {
                     Neuron* neuronToChange = neuronLayers[i][j];
 					//the networkOuput layer uses a different function, to calculate gradient from predicted values and should be values
-					if (i == neuronLayers.size() - 1) {
+					if (i == neuronLayers.size()-1) {
                         calculateError(neuronToChange,pair.second[j]);
 					}
 					else {
 						float sum = 0;
-						//neuronLayers[i+1][k].m_delta <- m_delta from layer before -1 bc we dont want to calculate for the bias
+						//neuronLayers[i+1][k].m_delta <- m_delta from layer before -1 because we don't want to calculate for the bias
 						for (int k = 0; k < neuronLayers[i+1].size(); k++) {
 							if(neuronLayers[i + 1][k]->getType() == Neuron::NEURON){
-                                sum += neuronLayers[i+1][k]->getDelta() ;//* weights[i][k][j];
+                                sum += neuronLayers[i+1][k]->getDelta(); //* neuronToChange->getWeights()[k];
                             }
 						}
 						//m_delta = f'(m_sum)*m_sum(prevDeltas*weights)
@@ -179,20 +164,6 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 					}
 				}
 			}
-
-			//benchmarking
-			auto finishBackprop = std::chrono::high_resolution_clock::now();
-			auto microsecondsBackprop = std::chrono::duration_cast<std::chrono::microseconds>(finishBackprop - startBackprop);
-			averageTimeBackprop += microsecondsBackprop.count();
-			timesBackprop++;
-
-			//std::vector<std::future<void>> threads;
-			//threads.reserve(neuronLayers.size());
-			//benchmarking
-			auto startChange = std::chrono::high_resolution_clock::now();
-
-			//this is ineffective
-			//auto calculateChange = std::async([=] {
 
 			//we now can calculate the weights
 			for (int i = 1; i < neuronLayers.size(); i++) {
@@ -208,58 +179,17 @@ int Network::train(std::vector<std::pair<std::vector<float>, std::vector<float>>
 					}
 				}
 			}
-
-			//});
-			//threads.push_back(std::move(calculateChange));
-
-			//for (std::future<void> &thread : threads) thread.get();
-
-			//benchmarking
-			auto finishChange = std::chrono::high_resolution_clock::now();
-			auto microsecondsChange = std::chrono::duration_cast<std::chrono::microseconds>(finishChange - startChange);
-			averageTimeChange += microsecondsChange.count();
-			timesChange++;
-
+			// TODO add error calculation for whole network
             calcRMSE(pair, networkOuput);
 		}
-		allOutputs.clear();
-
-		//benchmarking
-		auto finishEpoch = std::chrono::high_resolution_clock::now();
-		auto microsecondsEpoch = std::chrono::duration_cast<std::chrono::microseconds>(finishEpoch - startEpoch);
-
-        //std::cout << "Error: " << m_error << std::endl;
-		/*std::cout << averageTimeForward / timesForward << " microseconds forward calculation\n";
-		std::cout << averageTimeBackprop/timesBackprop << " microseconds backprop calculation\n";
-		std::cout << averageTimeChange/timesChange << " microseconds change calculation\n";
-		std::cout << microsecondsEpoch.count() << " microseconds currentEpoch calculation\n";*/
-		averageTimeForward = 0;
-		timesForward = 0;
-		averageTimeBackprop = 0;
-		timesBackprop = 0;
-		averageTimeChange = 0;
-		timesChange = 0;
-
-		averageTimeEpoch += microsecondsEpoch.count();
 
         if(currentEpoch == 0){
             std::cout << "First error: " << m_error << std::endl;
         }
 	}
 
-	std::cout << "Average microseconds for one epoch: " << (float) averageTimeEpoch / (float) getEpochsToTrain() << std::endl;
-	std::cout << "Average microseconds for one training data step: " << (float) averageTimeEpoch / (float) getEpochsToTrain() / (float) trainingData.size() << std::endl;
     std::cout << "Last error: " << m_error << std::endl;
-
-//         zero old changes
-// 	for (int i = 0; i < oldchange.size(); i++) {
-// 		for (int j = 0; j < oldchange[i].size(); j++) {
-// 			for (int k = 0; k < oldchange[i][j].size(); k++) {
-// 				oldchange[i][j][k] = 0;
-// 			}
-// 		}
-// 	}
-	//allOutputs.clear();
+	allOutputs.clear();
 
 	return 0;
 }
@@ -285,6 +215,11 @@ std::vector<Neuron*> Network::feedForward(std::vector<float> &testData) {
 	return neuronLayers[numLayers-1];
 }
 
+/**
+ * Get network output with given input
+ * @param testData Network input
+ * @return vector of network outputs
+ */
 std::vector<float> Network::predict(std::vector<float> &testData) {
 
 	std::vector<Neuron*> output = feedForward(testData);
@@ -294,7 +229,7 @@ std::vector<float> Network::predict(std::vector<float> &testData) {
 	for (Neuron* neuron : output) {
 		values.push_back(neuron->getActivation());
 	}
-        output.clear();
+	output.clear();
 	return values;
 }
 
@@ -316,8 +251,9 @@ float Network::backPropMomentum(float deltaCurrent, float activationBefore, floa
 }
 
 /**
+ * Applies delta to Neuron.
  * In this function different error functions are listed and called if the corresponding network enum @Code{Network::errorFunction} is set.
- * Note that this only applies to the ouput layer. Deltas are applied to Neuron directly in this function.
+ * Note that this only applies to the output layer. Do not confuse with whole network error.
  *
  * @param neuronToChange one neuron of the last layer which holds an output value
  * @param correctOutputs vector which holds the correct outputs from training data
